@@ -1,18 +1,15 @@
-## Sensu-Plugins-disk-checks
+## Sensu-Plugins-dns
 
-[![Build Status](https://travis-ci.org/sensu-plugins/sensu-plugins-dns.svg?branch=master)][1]
-[![Gem Version](https://badge.fury.io/rb/sensu-plugins-dns.svg)][2]
-[![Code Climate](https://codeclimate.com/github/sensu-plugins/sensu-plugins-dns/badges/gpa.svg)][3]
-[![Test Coverage](https://codeclimate.com/github/sensu-plugins/sensu-plugins-dns/badges/coverage.svg)][4]
-[![Dependency Status](https://gemnasium.com/sensu-plugins/sensu-plugins-dns.svg)][5]
+[![Build Status](https://travis-ci.org/sensu-plugins/sensu-plugins-dns.svg?branch=master)](https://travis-ci.org/sensu-plugins/sensu-plugins-dns)
+[![Gem Version](https://badge.fury.io/rb/sensu-plugins-dns.svg)](http://badge.fury.io/rb/sensu-plugins-dns)
+[![Code Climate](https://codeclimate.com/github/sensu-plugins/sensu-plugins-dns/badges/gpa.svg)](https://codeclimate.com/github/sensu-plugins/sensu-plugins-dns)
+[![Test Coverage](https://codeclimate.com/github/sensu-plugins/sensu-plugins-dns/badges/coverage.svg)](https://codeclimate.com/github/sensu-plugins/sensu-plugins-dns)
+[![Dependency Status](https://gemnasium.com/sensu-plugins/sensu-plugins-dns.svg)](https://gemnasium.com/sensu-plugins/sensu-plugins-dns)
 
 ## Functionality
 
 ## Files
- *
- *
- *
- *
+ * bin/check-dns
 
 ## Usage
 
@@ -41,7 +38,7 @@ Using the Sensu **sensu_gem** LWRP
 ```
 sensu_gem 'sensu-plugins-dns' do
   options('--prerelease')
-  version '0.0.1.alpha.4'
+  version '0.0.1'
 end
 ```
 
@@ -49,14 +46,8 @@ Using the Chef **gem_package** resource
 ```
 gem_package 'sensu-plugins-dns' do
   options('--prerelease')
-  version '0.0.1.alpha.4'
+  version '0.0.1'
 end
 ```
 
 ## Notes
-
-[1]:[https://travis-ci.org/sensu-plugins/sensu-plugins-dns]
-[2]:[http://badge.fury.io/rb/sensu-plugins-dns]
-[3]:[https://codeclimate.com/github/sensu-plugins/sensu-plugins-dns]
-[4]:[https://codeclimate.com/github/sensu-plugins/sensu-plugins-dns]
-[5]:[https://gemnasium.com/sensu-plugins/sensu-plugins-dns]
