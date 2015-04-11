@@ -28,9 +28,11 @@
 #   for details.
 #
 
-require 'rubygems' if RUBY_VERSION < '1.9.0'
 require 'sensu-plugin/check/cli'
 
+#
+# DNS
+#
 class DNS < Sensu::Plugin::Check::CLI
   option :domain,
          description: 'Domain to resolve (or ip if type PTR)',
@@ -64,7 +66,7 @@ class DNS < Sensu::Plugin::Check::CLI
          long: '--debug',
          boolean: true
 
-  def resolve_domain
+  def resolve_domain # rubocop:disable all
     if config[:type] == 'PTR'
       cmd = "dig #{config[:server] ? "@#{config[:server]}" : ''} -x #{config[:domain]} +short +time=1"
     else
@@ -79,7 +81,7 @@ class DNS < Sensu::Plugin::Check::CLI
     entries
   end
 
-  def run
+  def run # rubocop:disable all
     if config[:domain].nil?
       unknown 'No domain specified'
     else
