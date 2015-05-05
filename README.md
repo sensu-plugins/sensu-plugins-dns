@@ -5,49 +5,17 @@
 [![Code Climate](https://codeclimate.com/github/sensu-plugins/sensu-plugins-dns/badges/gpa.svg)](https://codeclimate.com/github/sensu-plugins/sensu-plugins-dns)
 [![Test Coverage](https://codeclimate.com/github/sensu-plugins/sensu-plugins-dns/badges/coverage.svg)](https://codeclimate.com/github/sensu-plugins/sensu-plugins-dns)
 [![Dependency Status](https://gemnasium.com/sensu-plugins/sensu-plugins-dns.svg)](https://gemnasium.com/sensu-plugins/sensu-plugins-dns)
+[ ![Codeship Status for sensu-plugins/sensu-plugins-dns](https://codeship.com/projects/2f39b7d0-d5af-0132-5eda-2a31c2fb7a04/status?branch=master)](https://codeship.com/projects/78143)
 
 ## Functionality
 
 ## Files
- * bin/check-dns
+ * bin/check-dns.rb
 
 ## Usage
 
 ## Installation
 
-Add the public key (if you haven’t already) as a trusted certificate
-
-```
-gem cert --add <(curl -Ls https://raw.githubusercontent.com/sensu-plugins/sensu-plugins.github.io/master/certs/sensu-plugins.pem)
-gem install sensu-plugins-dns -P MediumSecurity
-```
-
-You can also download the key from /certs/ within each repository.
-
-#### Rubygems
-
-`gem install sensu-plugins-dns`
-
-#### Bundler
-
-Add *sensu-plugins-disk-checks* to your Gemfile and run `bundle install` or `bundle update`
-
-#### Chef
-
-Using the Sensu **sensu_gem** LWRP
-```
-sensu_gem 'sensu-plugins-dns' do
-  options('--prerelease')
-  version '0.0.1'
-end
-```
-
-Using the Chef **gem_package** resource
-```
-gem_package 'sensu-plugins-dns' do
-  options('--prerelease')
-  version '0.0.1'
-end
-```
+[Installation and Setup](https://github.com/sensu-plugins/documentation/blob/master/user_docs/installation_instructions.md)
 
 ## Notes
