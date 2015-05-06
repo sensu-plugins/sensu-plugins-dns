@@ -28,3 +28,6 @@ IfUnlessModifier:
 
 RegexpLiteral:
   Enabled: false
+
+Documentation:
+  Enabled: false
