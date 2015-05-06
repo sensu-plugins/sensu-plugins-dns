@@ -5,7 +5,7 @@ require 'sensu-plugins-dns/version'
 #
 # Default class
 #
-module SensuPluginsDns
+module SensuPluginsDNS
   class << self
   end
 
