@@ -6,10 +6,7 @@ LineLength:
   Max: 160
 
 AbcSize:
-  Max: 50
-
-AbcSize:
-    Max: 50
+  Max: 75
 
 FileName:
   Enabled: false
@@ -29,5 +26,5 @@ IfUnlessModifier:
 RegexpLiteral:
   Enabled: false
 
-Documentation:
+Style/Documentation:
   Enabled: false
