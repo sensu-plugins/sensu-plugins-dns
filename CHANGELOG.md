@@ -5,8 +5,10 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 
 ## Unreleased][unreleased]
 
-## 0.0.1 - 2015-04-30
+## [0.0.3] - 2015-06-02
 
-### Added
-- initial release
+### Fixed
+- added binstubs
 
+### Changed
+- removed cruft from /lib
