@@ -3,9 +3,9 @@
 #   check-dns
 #
 # DESCRIPTION:
-#   This plugin checks DNS resolution using `dig`.
+#   This plugin checks DNS resolution using ruby `resolv`.
 #   Note: if testing reverse DNS with -t PTR option,
-#   results will end with trailing '.' (dot)
+#   results will not end with trailing '.' (dot)
 #
 # OUTPUT:
 #   plain text
@@ -29,6 +29,7 @@
 #
 
 require 'sensu-plugin/check/cli'
+require 'resolv'
 
 #
 # DNS
@@ -66,44 +67,33 @@ class DNS < Sensu::Plugin::Check::CLI
          long: '--debug',
          boolean: true
 
-  def resolve_domain # rubocop:disable all
+  def resolve_domain
+    resolv = config[:server].nil? ? Resolv::DNS.new : Resolv::DNS.new(nameserver: [config[:server]])
     if config[:type] == 'PTR'
-      cmd = "dig #{config[:server] ? "@#{config[:server]}" : ''} -x #{config[:domain]} +short +time=1"
+      entries = resolv.getnames(config[:domain]).map(&:to_s)
     else
-      cmd = "dig #{config[:server] ? "@#{config[:server]}" : ''} #{config[:domain]} #{config[:type]} +short +time=1"
+      entries = resolv.getaddresses(config[:domain]).map(&:to_s)
     end
-    puts cmd if config[:debug]
-    output = `#{cmd}`
-    puts output if config[:debug]
-    # Trim, split, remove comments and empty lines
-    entries = output.strip.split("\n").reject { |l| l.match('^;') || l.match('^$') }
     puts "Entries: #{entries}" if config[:debug]
+
     entries
   end
 
-  def run # rubocop:disable all
-    if config[:domain].nil?
-      unknown 'No domain specified'
-    else
-      entries = resolve_domain
-      if entries.length.zero?
-        if config[:warn_only]
-          warning "Could not resolve #{config[:domain]}"
-        else
-          critical "Could not resolve #{config[:domain]}"
-        end
+  def run
+    unknown 'No domain specified' if config[:domain].nil?
+
+    entries = resolve_domain
+    if entries.length.zero?
+      output = "Could not resolve #{config[:domain]}"
+      config[:warn_only] ? warning(output) : critical(output)
+    elsif config[:result]
+      if entries.include?(config[:result])
+        ok "Resolved #{config[:domain]} including #{config[:result]}"
       else
-        if config[:result]
-          # #YELLOW
-          if entries.include?(config[:result])  # rubocop:disable BlockNesting
-            ok "Resolved #{config[:domain]} including #{config[:result]}"
-          else
-            critical "Resolved #{config[:domain]} did not include #{config[:result]}"
-          end
-        else
-          ok "Resolved #{config[:domain]} #{config[:type]} records"
-        end
+        critical "Resolved #{config[:domain]} did not include #{config[:result]}"
       end
+    else
+      ok "Resolved #{config[:domain]} #{config[:type]} records"
     end
   end
 end
