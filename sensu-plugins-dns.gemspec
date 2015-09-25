@@ -50,5 +50,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rubocop',                   '0.32.1'
   s.add_development_dependency 'yard',                      '~> 0.8'
   s.add_development_dependency 'dnsruby',                    '1.58.0'
-
 end
