@@ -82,7 +82,11 @@ class DNS < Sensu::Plugin::Check::CLI
 
     begin
       entries = resolve_domain
-      rescue Exception => e
+      rescue  Dnsruby::NXDomain => ed
+        output = "Could not resolve #{config[:domain]} #{config[:type]} record"
+        critical(output)
+        return
+      rescue  => e
         output =  "Couldn not resolve  #{config[:domain]}: #{e}"
         config[:warn_only] ? warning(output) : critical(output)
         return
