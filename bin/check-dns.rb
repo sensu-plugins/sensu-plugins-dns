@@ -81,31 +81,29 @@ class DNS < Sensu::Plugin::Check::CLI
     unknown 'No domain specified' if config[:domain].nil?
 
    begin
-   entries = resolve_domain
-
+     entries = resolve_domain
    rescue Exception => e
-          output =  "Couldn not resolve  #{config[:domain]}: #{e}"
-          config[:warn_only] ? warning(output) : critical(output)
+     output =  "Couldn not resolve  #{config[:domain]}: #{e}"
+     config[:warn_only] ? warning(output) : critical(output)
    return
    end
     puts entries.answer  if config[:debug]
     if entries.answer.length.zero?
-	     output = "Could not resolve #{config[:domain]} #{config[:type]} record"
-	      config[:warn_only] ? warning(output) : critical(output)
+      output = "Could not resolve #{config[:domain]} #{config[:type]} record"
+      config[:warn_only] ? warning(output) : critical(output)
     elsif config[:result]
-	 if entries.answer.count > 1  
-         b = entries.answer.rrsets("#{config[:type]}").to_s
-         else
-		 b = entries.answer.first.to_s
-        end
-	if  b.include?(config[:result])
-        	ok "Resolved #{config[:domain]} #{config[:type]} included #{config[:result]}"
-      	else
-        	critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
-        end
-	
+      if entries.answer.count > 1
+        b = entries.answer.rrsets("#{config[:type]}").to_s
+      else
+        b = entries.answer.first.to_s
+      end
+    if  b.include?(config[:result])
+      ok "Resolved #{config[:domain]} #{config[:type]} included #{config[:result]}"
     else
-      ok "Resolved #{config[:domain]} #{config[:type]} "
+      critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
+    end
+    else
+      ok "Resolved #{config[:domain]} #{config[:type]}"
     end
   end
 end
