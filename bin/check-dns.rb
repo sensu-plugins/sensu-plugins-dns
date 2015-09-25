@@ -69,7 +69,7 @@ class DNS < Sensu::Plugin::Check::CLI
          boolean: true
 
   def resolve_domain
-    resolv = config[:server].nil? ? Dnsruby::Resolver.new : Dnsruby::DNS.new(nameserver: [config[:server]])
+    resolv = config[:server].nil? ? Dnsruby::Resolver.new : Dnsruby::Resolver.new(nameserver: [config[:server]])
     if config[:type] == 'PTR'
       entries = resolv.getnames(config[:domain]).map(&:to_s)
     else
@@ -86,13 +86,17 @@ class DNS < Sensu::Plugin::Check::CLI
   def run
     unknown 'No domain specified' if config[:domain].nil?
 
-    entries = resolve_domain
-    puts entries.answer  if config[:debug]
+	begin
+	    entries = resolve_domain
 
-    if entries.answer.length.zero?
-      output = "Could not resolve #{config[:domain]}"
-      config[:warn_only] ? warning(output) : critical(output)
-    elsif config[:result]
+	rescue Exception => e
+		  output =  "Couldn not resolve  #{config[:domain]}: #{e}"
+		  config[:warn_only] ? warning(output) : critical(output)
+	  return
+	  end
+      	  puts entries.answer  if config[:debug]
+
+    if config[:result]
 	 b = entries.answer.collect{|x| x.address.to_s}
 	if  b.include?(config[:result])
         	ok "Resolved #{config[:domain]} including #{config[:result]}"
