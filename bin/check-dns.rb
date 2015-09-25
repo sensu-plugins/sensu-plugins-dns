@@ -80,13 +80,13 @@ class DNS < Sensu::Plugin::Check::CLI
   def run
     unknown 'No domain specified' if config[:domain].nil?
 
-   begin
-     entries = resolve_domain
-   rescue Exception => e
-     output =  "Couldn not resolve  #{config[:domain]}: #{e}"
-     config[:warn_only] ? warning(output) : critical(output)
-   return
-   end
+    begin
+      entries = resolve_domain
+      rescue Exception => e
+        output =  "Couldn not resolve  #{config[:domain]}: #{e}"
+        config[:warn_only] ? warning(output) : critical(output)
+      return
+    end
     puts entries.answer  if config[:debug]
     if entries.answer.length.zero?
       output = "Could not resolve #{config[:domain]} #{config[:type]} record"
