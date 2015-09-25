@@ -100,8 +100,8 @@ class DNS < Sensu::Plugin::Check::CLI
       if  b.include?(config[:result])
         ok "Resolved #{config[:domain]} #{config[:type]} included #{config[:result]}"
       else
-      critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
-    end
+        critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
+      end
     else
       ok "Resolved #{config[:domain]} #{config[:type]}"
     end
