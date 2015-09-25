@@ -92,7 +92,7 @@ class DNS < Sensu::Plugin::Check::CLI
       output = "Could not resolve #{config[:domain]}"
       config[:warn_only] ? warning(output) : critical(output)
     elsif config[:result]
-      if entries.answer.include?(config[:result])
+      if entries.answer.entries[0].address.to_s.include?(config[:result])
         ok "Resolved #{config[:domain]} including #{config[:result]}"
       else
         critical "Resolved #{config[:domain]} did not include #{config[:result]}"
