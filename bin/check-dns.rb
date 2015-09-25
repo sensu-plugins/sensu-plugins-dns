@@ -73,6 +73,7 @@ class DNS < Sensu::Plugin::Check::CLI
       entries = resolv.getnames(config[:domain]).map(&:to_s)
     else
 #      entries = resolv.query(config[:domain]).map(&:to_s)
+	
       entries = resolv.query(config[:domain])
 
     end
@@ -85,23 +86,19 @@ class DNS < Sensu::Plugin::Check::CLI
     unknown 'No domain specified' if config[:domain].nil?
 
     entries = resolve_domain
-    res = Dnsruby::Resolver.new
-    ret = res.query("example.com") # Defaults to A record
-    a_recs = ret.answer.rrset("A")
-    puts "Vastus: #{a_recs}"
-    puts "test"
-    puts entries.answer.rrset("A")
-#    if entries.length.zero?
-#      output = "Could not resolve #{config[:domain]}"
-#      config[:warn_only] ? warning(output) : critical(output)
-#    elsif config[:result]
-#      if entries.include?(config[:result])
-#        ok "Resolved #{config[:domain]} including #{config[:result]}"
-#      else
-#        critical "Resolved #{config[:domain]} did not include #{config[:result]}"
-#      end
-#    else
-#      ok "Resolved #{config[:domain]} #{config[:type]} records"
-#    end
+    puts entries.answer.entries[0].address.to_s  if config[:debug]
+
+    if entries.answer.length.zero?
+      output = "Could not resolve #{config[:domain]}"
+      config[:warn_only] ? warning(output) : critical(output)
+    elsif config[:result]
+      if entries.answer.include?(config[:result])
+        ok "Resolved #{config[:domain]} including #{config[:result]}"
+      else
+        critical "Resolved #{config[:domain]} did not include #{config[:result]}"
+      end
+    else
+      ok "Resolved #{config[:domain]} #{config[:type]} records"
+    end
   end
 end
