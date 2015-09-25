@@ -70,14 +70,9 @@ class DNS < Sensu::Plugin::Check::CLI
 
   def resolve_domain
     resolv = config[:server].nil? ? Dnsruby::Resolver.new : Dnsruby::Resolver.new(nameserver: [config[:server]])
-    if config[:type] == 'PTR'
-      entries = resolv.getnames(config[:domain]).map(&:to_s)
-    else
-#      entries = resolv.query(config[:domain]).map(&:to_s)
-	
-      entries = resolv.query(config[:domain])
 
-    end
+      entries = resolv.query(config[:domain], config[:type])
+
     puts "Entries: #{entries}" if config[:debug]
 
     entries
@@ -95,16 +90,23 @@ class DNS < Sensu::Plugin::Check::CLI
 	  return
 	  end
       	  puts entries.answer  if config[:debug]
-
-    if config[:result]
-	 b = entries.answer.collect{|x| x.address.to_s}
+	if entries.answer.length.zero?
+	      output = "Could not resolve #{config[:domain]} #{config[:type]} record"
+	      config[:warn_only] ? warning(output) : critical(output)
+    elsif config[:result]
+	if entries.answer.count > 1  
+	b = entries.answer.rrsets("#{config[:type]}").to_s
+        else 
+	   b = entries.answer.first.to_s
+        end
 	if  b.include?(config[:result])
-        	ok "Resolved #{config[:domain]} including #{config[:result]}"
+        	ok "Resolved #{config[:domain]} #{config[:type]} included #{config[:result]}"
       	else
-        	critical "Resolved #{config[:domain]} did not include #{config[:result]}"
+        	critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
       end
+	
     else
-      ok "Resolved #{config[:domain]} #{config[:type]} records"
+      ok "Resolved #{config[:domain]} #{config[:type]} "
     end
   end
 end
