@@ -29,8 +29,8 @@
 #
 
 require 'sensu-plugin/check/cli'
-require 'resolv'
-
+#require 'resolv'
+require 'dnsruby'
 #
 # DNS
 #
@@ -68,11 +68,13 @@ class DNS < Sensu::Plugin::Check::CLI
          boolean: true
 
   def resolve_domain
-    resolv = config[:server].nil? ? Resolv::DNS.new : Resolv::DNS.new(nameserver: [config[:server]])
+    resolv = config[:server].nil? ? Dnsruby::Resolver.new : Resolv::DNS.new(nameserver: [config[:server]])
     if config[:type] == 'PTR'
       entries = resolv.getnames(config[:domain]).map(&:to_s)
     else
-      entries = resolv.getaddresses(config[:domain]).map(&:to_s)
+#      entries = resolv.query(config[:domain]).map(&:to_s)
+      entries = resolv.query(config[:domain])
+
     end
     puts "Entries: #{entries}" if config[:debug]
 
@@ -83,17 +85,23 @@ class DNS < Sensu::Plugin::Check::CLI
     unknown 'No domain specified' if config[:domain].nil?
 
     entries = resolve_domain
-    if entries.length.zero?
-      output = "Could not resolve #{config[:domain]}"
-      config[:warn_only] ? warning(output) : critical(output)
-    elsif config[:result]
-      if entries.include?(config[:result])
-        ok "Resolved #{config[:domain]} including #{config[:result]}"
-      else
-        critical "Resolved #{config[:domain]} did not include #{config[:result]}"
-      end
-    else
-      ok "Resolved #{config[:domain]} #{config[:type]} records"
-    end
+    res = Dnsruby::Resolver.new
+    ret = res.query("example.com") # Defaults to A record
+    a_recs = ret.answer.rrset("A")
+    puts "Vastus: #{a_recs}"
+    puts "test"
+    puts entries.answer.rrset("A")
+#    if entries.length.zero?
+#      output = "Could not resolve #{config[:domain]}"
+#      config[:warn_only] ? warning(output) : critical(output)
+#    elsif config[:result]
+#      if entries.include?(config[:result])
+#        ok "Resolved #{config[:domain]} including #{config[:result]}"
+#      else
+#        critical "Resolved #{config[:domain]} did not include #{config[:result]}"
+#      end
+#    else
+#      ok "Resolved #{config[:domain]} #{config[:type]} records"
+#    end
   end
 end
