@@ -85,7 +85,7 @@ class DNS < Sensu::Plugin::Check::CLI
       rescue Exception => e
         output =  "Couldn not resolve  #{config[:domain]}: #{e}"
         config[:warn_only] ? warning(output) : critical(output)
-      return
+        return
     end
     puts entries.answer  if config[:debug]
     if entries.answer.length.zero?
@@ -97,9 +97,9 @@ class DNS < Sensu::Plugin::Check::CLI
       else
         b = entries.answer.first.to_s
       end
-    if  b.include?(config[:result])
-      ok "Resolved #{config[:domain]} #{config[:type]} included #{config[:result]}"
-    else
+      if  b.include?(config[:result])
+        ok "Resolved #{config[:domain]} #{config[:type]} included #{config[:result]}"
+      else
       critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
     end
     else
