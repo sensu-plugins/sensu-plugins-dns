@@ -31,7 +31,6 @@
 
 require 'sensu-plugin/check/cli'
 require 'dnsruby'
-#include 'dnsruby'
 #
 # DNS
 #
@@ -71,7 +70,7 @@ class DNS < Sensu::Plugin::Check::CLI
   def resolve_domain
     resolv = config[:server].nil? ? Dnsruby::Resolver.new : Dnsruby::Resolver.new(nameserver: [config[:server]])
 
-      entries = resolv.query(config[:domain], config[:type])
+    entries = resolv.query(config[:domain], config[:type])
 
     puts "Entries: #{entries}" if config[:debug]
 
@@ -82,15 +81,15 @@ class DNS < Sensu::Plugin::Check::CLI
     unknown 'No domain specified' if config[:domain].nil?
 
 	begin
-	    entries = resolve_domain
+             entries = resolve_domain
 
-	rescue Exception => e
-		  output =  "Couldn not resolve  #{config[:domain]}: #{e}"
-		  config[:warn_only] ? warning(output) : critical(output)
-	  return
-	  end
-      	  puts entries.answer  if config[:debug]
-	if entries.answer.length.zero?
+        rescue Exception => e
+                 output =  "Couldn not resolve  #{config[:domain]}: #{e}"
+		 config[:warn_only] ? warning(output) : critical(output)
+        return
+	end
+    puts entries.answer  if config[:debug]
+    if entries.answer.length.zero?
 	      output = "Could not resolve #{config[:domain]} #{config[:type]} record"
 	      config[:warn_only] ? warning(output) : critical(output)
     elsif config[:result]
@@ -103,7 +102,7 @@ class DNS < Sensu::Plugin::Check::CLI
         	ok "Resolved #{config[:domain]} #{config[:type]} included #{config[:result]}"
       	else
         	critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
-      end
+        end
 	
     else
       ok "Resolved #{config[:domain]} #{config[:type]} "
