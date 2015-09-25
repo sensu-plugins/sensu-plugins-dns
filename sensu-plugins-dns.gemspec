@@ -2,7 +2,6 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require 'date'
-require 'dnsruby'
 if RUBY_VERSION < '2.0.0'
   require 'sensu-plugins-dns'
 else
@@ -39,7 +38,7 @@ Gem::Specification.new do |s|
   s.version                = SensuPluginsDNS::Version::VER_STRING
 
   s.add_runtime_dependency 'sensu-plugin', '1.2.0'
-  s.add_runtime_dependency 'dnsruby'
+  s.add_runtime_dependency 'dnsruby',  '1.5.8'
 
   s.add_development_dependency 'bundler',                   '~> 1.7'
   s.add_development_dependency 'codeclimate-test-reporter', '~> 0.4'
