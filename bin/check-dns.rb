@@ -3,7 +3,7 @@
 #   check-dns
 #
 # DESCRIPTION:
-#   This plugin checks DNS resolution using ruby `resolv`.
+#   This plugin checks DNS resolution using dnsruby .
 #   Note: if testing reverse DNS with -t PTR option,
 #   results will not end with trailing '.' (dot)
 #
@@ -15,6 +15,7 @@
 #
 # DEPENDENCIES:
 #   gem: sensu-plugin
+#   gem: dnsruby
 #
 # USAGE:
 #   example commands
@@ -29,8 +30,8 @@
 #
 
 require 'sensu-plugin/check/cli'
-#require 'resolv'
 require 'dnsruby'
+#include 'dnsruby'
 #
 # DNS
 #
@@ -68,7 +69,7 @@ class DNS < Sensu::Plugin::Check::CLI
          boolean: true
 
   def resolve_domain
-    resolv = config[:server].nil? ? Dnsruby::Resolver.new : Resolv::DNS.new(nameserver: [config[:server]])
+    resolv = config[:server].nil? ? Dnsruby::Resolver.new : Dnsruby::DNS.new(nameserver: [config[:server]])
     if config[:type] == 'PTR'
       entries = resolv.getnames(config[:domain]).map(&:to_s)
     else
@@ -86,16 +87,17 @@ class DNS < Sensu::Plugin::Check::CLI
     unknown 'No domain specified' if config[:domain].nil?
 
     entries = resolve_domain
-    puts entries.answer.entries[0].address.to_s  if config[:debug]
+    puts entries.answer  if config[:debug]
 
     if entries.answer.length.zero?
       output = "Could not resolve #{config[:domain]}"
       config[:warn_only] ? warning(output) : critical(output)
     elsif config[:result]
-      if entries.answer.entries[0].address.to_s.include?(config[:result])
-        ok "Resolved #{config[:domain]} including #{config[:result]}"
-      else
-        critical "Resolved #{config[:domain]} did not include #{config[:result]}"
+	 b = entries.answer.collect{|x| x.address.to_s}
+	if  b.include?(config[:result])
+        	ok "Resolved #{config[:domain]} including #{config[:result]}"
+      	else
+        	critical "Resolved #{config[:domain]} did not include #{config[:result]}"
       end
     else
       ok "Resolved #{config[:domain]} #{config[:type]} records"
