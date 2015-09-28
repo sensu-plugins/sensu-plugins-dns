@@ -6,6 +6,10 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ## [Unreleased][unreleased]
 - nothing
 
+## [0.0.6] - 2015-09-28
+### Changed
+- Migrated from ruby library resolv to dnsruby to support more dns related checks
+
 ## [0.0.5] - 2015-08-05
 ### Removed
 - PTR lookups no longer end with a dot '.'
