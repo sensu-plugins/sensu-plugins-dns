@@ -4,7 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased][unreleased]
-- nothing
+* nothing
+
+## [0.0.6] - 2015-09-28
+### Changed
+- Migrated from ruby library resolv to dnsruby to support more dns related checks
 
 ## [0.0.5] - 2015-08-05
 ### Removed
