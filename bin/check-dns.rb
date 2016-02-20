@@ -82,26 +82,26 @@ class DNS < Sensu::Plugin::Check::CLI
 
     begin
       entries = resolve_domain
-      rescue  Dnsruby::NXDomain
-        output = "Could not resolve #{config[:domain]} #{config[:type]} record"
-        critical(output)
-        return
-      rescue  => e
-        output =  "Couldn not resolve  #{config[:domain]}: #{e}"
-        config[:warn_only] ? warning(output) : critical(output)
-        return
+    rescue Dnsruby::NXDomain
+      output = "Could not resolve #{config[:domain]} #{config[:type]} record"
+      critical(output)
+      return
+    rescue => e
+      output = "Couldn not resolve  #{config[:domain]}: #{e}"
+      config[:warn_only] ? warning(output) : critical(output)
+      return
     end
-    puts entries.answer  if config[:debug]
+    puts entries.answer if config[:debug]
     if entries.answer.length.zero?
       output = "Could not resolve #{config[:domain]} #{config[:type]} record"
       config[:warn_only] ? warning(output) : critical(output)
     elsif config[:result]
-      if entries.answer.count > 1
-        b = entries.answer.rrsets("#{config[:type]}").to_s
-      else
-        b = entries.answer.first.to_s
-      end
-      if  b.include?(config[:result])
+      b = if entries.answer.count > 1
+            entries.answer.rrsets(config[:type].to_s).to_s
+          else
+            entries.answer.first.to_s
+          end
+      if b.include?(config[:result])
         ok "Resolved #{config[:domain]} #{config[:type]} included #{config[:result]}"
       else
         critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
