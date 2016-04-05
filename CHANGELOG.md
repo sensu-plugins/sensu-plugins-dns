@@ -4,7 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
-* nothing
+### Added
+* Adding support for Regular Expression matching
 
 ## [0.0.6] - 2015-09-28
 ### Changed
