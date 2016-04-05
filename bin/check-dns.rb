@@ -56,6 +56,11 @@ class DNS < Sensu::Plugin::Check::CLI
          short: '-r RESULT',
          long: '--result RESULT'
 
+  option :regex,
+         description: 'Compare results to a regular expression',
+         short: '-R REGEX',
+         long: '--regex-match REGEX'
+
   option :warn_only,
          description: 'Warn instead of critical on failure',
          short: '-w',
@@ -75,6 +80,21 @@ class DNS < Sensu::Plugin::Check::CLI
     puts "Entries: #{entries}" if config[:debug]
 
     entries
+  end
+
+  def check_against_regex(entries, regex)
+    # produce an Array of entry strings
+    b = if entries.answer.count > 1
+          entries.answer.rrsets(config[:type].to_s).map(&:to_s)
+        else
+          [entries.answer.first.to_s]
+        end
+    b.each do |answer|
+      if answer.match(regex)
+        ok "Resolved #{config[:domain]} #{config[:type]} matched #{regex}"
+      end
+    end # b.each()
+    critical "Resolved #{config[:domain]} #{config[:type]} did not match #{regex}"
   end
 
   def run
@@ -106,6 +126,8 @@ class DNS < Sensu::Plugin::Check::CLI
       else
         critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
       end
+    elsif config[:regex]
+      check_against_regex(entries, Regexp.new(config[:regex]))
     else
       ok "Resolved #{config[:domain]} #{config[:type]}"
     end
