@@ -10,6 +10,7 @@
 
 ## Files
  * bin/check-dns.rb
+ * bin/metrics-dns.rb
 
 ## Usage
 
