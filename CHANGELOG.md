@@ -7,6 +7,7 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ### Added
 * Adding support for Regular Expression matching
 * Added simple response time metric
+- Unlocked the dnsruby dependency to allow upgrades
 
 ## [0.0.6] - 2015-09-28
 ### Changed
