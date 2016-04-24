@@ -72,11 +72,15 @@ class DNS < Sensu::Plugin::Check::CLI
          long: '--debug',
          boolean: true
 
-  def resolve_domain
+  option :validate,
+         description: 'Validate dnssec responses',
+         long: '--validate',
+         boolean: true
+
+ def resolve_domain
     resolv = config[:server].nil? ? Dnsruby::Resolver.new : Dnsruby::Resolver.new(nameserver: [config[:server]])
-
+    resolv.do_validation = true if config[:validate]
     entries = resolv.query(config[:domain], config[:type])
-
     puts "Entries: #{entries}" if config[:debug]
 
     entries
@@ -122,12 +126,18 @@ class DNS < Sensu::Plugin::Check::CLI
             entries.answer.first.to_s
           end
       if b.include?(config[:result])
-        ok "Resolved #{config[:domain]} #{config[:type]} included #{config[:result]}"
+        ok "Resolved #{entries.security_level} #{config[:domain]} #{config[:type]} included #{config[:result]}"
       else
         critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
       end
     elsif config[:regex]
       check_against_regex(entries, Regexp.new(config[:regex]))
+
+    elsif config[:validate]
+      if entries.security_level != "SECURE"
+      critical "Resolved  #{entries.security_level} #{config[:domain]} #{config[:type]}"
+      end
+      ok "Resolved #{entries.security_level} #{config[:domain]} #{config[:type]}"
     else
       ok "Resolved #{config[:domain]} #{config[:type]}"
     end
