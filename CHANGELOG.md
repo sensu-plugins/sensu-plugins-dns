@@ -3,8 +3,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
-## [Unreleased][unreleased]
-* nothing
+## [Unreleased]
+### Added
+* Adding support for Regular Expression matching
+* Added simple response time metric
+- Unlocked the dnsruby dependency to allow upgrades
 
 ## [0.0.6] - 2015-09-28
 ### Changed
@@ -23,9 +26,15 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 - updated sensu-plugin gem to 1.2.0
 
 ## [0.0.3] - 2015-06-02
-
 ### Fixed
 - added binstubs
 
 ### Changed
 - removed cruft from /lib
+
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-ansible/compare/0.0.6...HEAD
+[0.0.5]: https://github.com/sensu-plugins/sensu-plugins-ansible/compare/0.0.5...0.0.6
+[0.0.5]: https://github.com/sensu-plugins/sensu-plugins-ansible/compare/0.0.4...0.0.5
+[0.0.4]: https://github.com/sensu-plugins/sensu-plugins-ansible/compare/0.0.3...0.0.4
+[0.0.3]: https://github.com/sensu-plugins/sensu-plugins-ansible/compare/0.0.2...0.0.3
+[0.0.2]: https://github.com/sensu-plugins/sensu-plugins-ansible/compare/0.0.1...0.0.2

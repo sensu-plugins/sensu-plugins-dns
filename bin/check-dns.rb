@@ -56,6 +56,11 @@ class DNS < Sensu::Plugin::Check::CLI
          short: '-r RESULT',
          long: '--result RESULT'
 
+  option :regex,
+         description: 'Compare results to a regular expression',
+         short: '-R REGEX',
+         long: '--regex-match REGEX'
+
   option :warn_only,
          description: 'Warn instead of critical on failure',
          short: '-w',
@@ -77,35 +82,52 @@ class DNS < Sensu::Plugin::Check::CLI
     entries
   end
 
+  def check_against_regex(entries, regex)
+    # produce an Array of entry strings
+    b = if entries.answer.count > 1
+          entries.answer.rrsets(config[:type].to_s).map(&:to_s)
+        else
+          [entries.answer.first.to_s]
+        end
+    b.each do |answer|
+      if answer.match(regex)
+        ok "Resolved #{config[:domain]} #{config[:type]} matched #{regex}"
+      end
+    end # b.each()
+    critical "Resolved #{config[:domain]} #{config[:type]} did not match #{regex}"
+  end
+
   def run
     unknown 'No domain specified' if config[:domain].nil?
 
     begin
       entries = resolve_domain
-      rescue  Dnsruby::NXDomain
-        output = "Could not resolve #{config[:domain]} #{config[:type]} record"
-        critical(output)
-        return
-      rescue  => e
-        output =  "Couldn not resolve  #{config[:domain]}: #{e}"
-        config[:warn_only] ? warning(output) : critical(output)
-        return
+    rescue Dnsruby::NXDomain
+      output = "Could not resolve #{config[:domain]} #{config[:type]} record"
+      critical(output)
+      return
+    rescue => e
+      output = "Couldn not resolve  #{config[:domain]}: #{e}"
+      config[:warn_only] ? warning(output) : critical(output)
+      return
     end
-    puts entries.answer  if config[:debug]
+    puts entries.answer if config[:debug]
     if entries.answer.length.zero?
       output = "Could not resolve #{config[:domain]} #{config[:type]} record"
       config[:warn_only] ? warning(output) : critical(output)
     elsif config[:result]
-      if entries.answer.count > 1
-        b = entries.answer.rrsets("#{config[:type]}").to_s
-      else
-        b = entries.answer.first.to_s
-      end
-      if  b.include?(config[:result])
+      b = if entries.answer.count > 1
+            entries.answer.rrsets(config[:type].to_s).to_s
+          else
+            entries.answer.first.to_s
+          end
+      if b.include?(config[:result])
         ok "Resolved #{config[:domain]} #{config[:type]} included #{config[:result]}"
       else
         critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
       end
+    elsif config[:regex]
+      check_against_regex(entries, Regexp.new(config[:regex]))
     else
       ok "Resolved #{config[:domain]} #{config[:type]}"
     end
