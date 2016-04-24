@@ -3,10 +3,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
-## [Unreleased]
+## [0.0.7] - 2016-04-24
 ### Added
 * Adding support for Regular Expression matching
 * Added simple response time metric
+* Added dnssec validation --validate
 - Unlocked the dnsruby dependency to allow upgrades
 
 ## [0.0.6] - 2015-09-28
