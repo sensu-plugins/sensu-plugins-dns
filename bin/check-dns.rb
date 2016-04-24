@@ -74,6 +74,7 @@ class DNS < Sensu::Plugin::Check::CLI
 
   option :validate,
          description: 'Validate dnssec responses',
+         short: '-v',
          long: '--validate',
          boolean: true
 
