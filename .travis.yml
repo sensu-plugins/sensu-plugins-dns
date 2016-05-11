@@ -26,7 +26,6 @@ deploy:
   on:
     tags: true
     all_branches: true
-    rvm: 1.9.3
     rvm: 2.0
     rvm: 2.1
     rvm: 2.2
