@@ -3,12 +3,18 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
-## [0.0.7] - 2016-04-24
+## [Unreleased]
+
+## [1.0.0] - 2016-05-11
 ### Added
-* Adding support for Regular Expression matching
-* Added simple response time metric
-* Added dnssec validation --validate
+- Added support for Regular Expression matching
+- Added simple response time metric
+- Added dnssec validation --validate
 - Unlocked the dnsruby dependency to allow upgrades
+- Support for Ruby 2.3
+
+### Removed
+- Support for Ruby 1.9.3
 
 ## [0.0.6] - 2015-09-28
 ### Changed
@@ -33,9 +39,10 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ### Changed
 - removed cruft from /lib
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-ansible/compare/0.0.6...HEAD
-[0.0.5]: https://github.com/sensu-plugins/sensu-plugins-ansible/compare/0.0.5...0.0.6
-[0.0.5]: https://github.com/sensu-plugins/sensu-plugins-ansible/compare/0.0.4...0.0.5
-[0.0.4]: https://github.com/sensu-plugins/sensu-plugins-ansible/compare/0.0.3...0.0.4
-[0.0.3]: https://github.com/sensu-plugins/sensu-plugins-ansible/compare/0.0.2...0.0.3
-[0.0.2]: https://github.com/sensu-plugins/sensu-plugins-ansible/compare/0.0.1...0.0.2
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/0.0.6...1.0.0
+[0.0.6]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/0.0.5...0.0.6
+[0.0.5]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/0.0.4...0.0.5
+[0.0.4]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/0.0.3...0.0.4
+[0.0.3]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/0.0.2...0.0.3
+[0.0.2]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/0.0.1...0.0.2
