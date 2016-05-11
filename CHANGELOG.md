@@ -16,6 +16,9 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ### Removed
 - Support for Ruby 1.9.3
 
+### Changed
+- Upgrade to rubocop 0.40 and cleanup
+
 ## [0.0.6] - 2015-09-28
 ### Changed
 - Migrated from ruby library resolv to dnsruby to support more dns related checks
