@@ -51,6 +51,12 @@ class DNS < Sensu::Plugin::Check::CLI
          short: '-s SERVER',
          long: '--server SERVER'
 
+  option :port,
+         description: 'Port to use for resolution',
+         short: '-p PORT',
+         long: '--port PORT',
+         proc: proc(&:to_i)
+
   option :result,
          description: 'A positive result entry',
          short: '-r RESULT',
@@ -79,7 +85,10 @@ class DNS < Sensu::Plugin::Check::CLI
          boolean: true
 
   def resolve_domain
-    resolv = config[:server].nil? ? Dnsruby::Resolver.new : Dnsruby::Resolver.new(nameserver: [config[:server]])
+    dnsruby_config = {}
+    dnsruby_config[:nameserver] = [config[:server]] unless config[:server].nil?
+    dnsruby_config[:port] = config[:port] unless config[:port].nil?
+    resolv = Dnsruby::Resolver.new(dnsruby_config)
     resolv.do_validation = true if config[:validate]
     entries = resolv.query(config[:domain], config[:type])
     puts "Entries: #{entries}" if config[:debug]

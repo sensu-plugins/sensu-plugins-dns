@@ -44,6 +44,12 @@ class DNSGraphite < Sensu::Plugin::Metric::CLI::Graphite
          short: '-s SERVER',
          long: '--server SERVER'
 
+  option :port,
+         description: 'Port to use for resolution',
+         short: '-p PORT',
+         long: '--port PORT',
+         proc: proc(&:to_i)
+
   option :scheme,
          description: 'Metric naming scheme, text to prepend to metric',
          short: '-S SCHEME',
@@ -54,7 +60,10 @@ class DNSGraphite < Sensu::Plugin::Metric::CLI::Graphite
     unknown 'No domain specified' if config[:domain].nil?
 
     begin
-      resolver = config[:server].nil? ? Dnsruby::Resolver.new : Dnsruby::Resolver.new(nameserver: [config[:server]])
+      dnsruby_config = {}
+      dnsruby_config[:nameserver] = [config[:server]] unless config[:server].nil?
+      dnsruby_config[:port] = config[:port] unless config[:port].nil?
+      resolver = Dnsruby::Resolver.new(dnsruby_config)
       result = Benchmark.realtime { resolver.query(config[:domain], config[:type]) }
 
       key_name = config[:domain].to_s.tr('.', '_')
