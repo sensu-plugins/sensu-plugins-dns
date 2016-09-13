@@ -6,6 +6,7 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ## [Unreleased]
 ### Added
 - Added option for DNS server port
+- Added option for use TCP instead of UDP
 
 ## [1.0.0] - 2016-05-11
 ### Added

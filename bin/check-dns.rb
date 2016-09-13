@@ -84,10 +84,17 @@ class DNS < Sensu::Plugin::Check::CLI
          long: '--validate',
          boolean: true
 
+  option :use_tcp,
+         description: 'Use tcp for resolution',
+         short: '-T',
+         long: '--use-tcp',
+         boolean: true
+
   def resolve_domain
     dnsruby_config = {}
     dnsruby_config[:nameserver] = [config[:server]] unless config[:server].nil?
     dnsruby_config[:port] = config[:port] unless config[:port].nil?
+    dnsruby_config[:use_tcp] = config[:use_tcp] unless config[:use_tcp].nil?
     resolv = Dnsruby::Resolver.new(dnsruby_config)
     resolv.do_validation = true if config[:validate]
     entries = resolv.query(config[:domain], config[:type])
