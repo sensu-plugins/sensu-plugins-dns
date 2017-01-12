@@ -128,7 +128,7 @@ class DNS < Sensu::Plugin::Check::CLI
       critical(output)
       return
     rescue => e
-      output = "Couldn not resolve  #{config[:domain]}: #{e}"
+      output = "Could not resolve  #{config[:domain]}: #{e}"
       config[:warn_only] ? warning(output) : critical(output)
       return
     end
