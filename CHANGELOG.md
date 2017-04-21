@@ -7,6 +7,7 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ### Added
 - Added option for DNS server port
 - Added option for use TCP instead of UDP
+- Added `--class` argument to both metric and check scripts
 
 ## [1.0.0] - 2016-05-11
 ### Added
