@@ -46,6 +46,12 @@ class DNS < Sensu::Plugin::Check::CLI
          long: '--type RECORD',
          default: 'A'
 
+  option :class,
+         description: 'Record class to resolve (IN, CH, HS, ANY)',
+         short: '-c CLASS',
+         long: '--class CLASS',
+         default: 'IN'
+
   option :server,
          description: 'Server to use for resolution',
          short: '-s SERVER',
@@ -97,7 +103,7 @@ class DNS < Sensu::Plugin::Check::CLI
     dnsruby_config[:use_tcp] = config[:use_tcp] unless config[:use_tcp].nil?
     resolv = Dnsruby::Resolver.new(dnsruby_config)
     resolv.do_validation = true if config[:validate]
-    entries = resolv.query(config[:domain], config[:type])
+    entries = resolv.query(config[:domain], config[:type], config[:class])
     puts "Entries: #{entries}" if config[:debug]
 
     entries
