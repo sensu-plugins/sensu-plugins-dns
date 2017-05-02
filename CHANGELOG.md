@@ -9,6 +9,7 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 - Added option for use TCP instead of UDP
 - Added `--class` argument to both metric and check scripts
 - Added DNS lookup timeout option
+- check-dns.rb will now ignore case and expand shorthand when comparing ipv4 and pev6 records by turning them into ipaddr objects for comparison (@majormoses)
 
 ## [1.0.0] - 2016-05-11
 ### Added

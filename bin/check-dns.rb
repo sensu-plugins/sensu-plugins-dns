@@ -31,6 +31,7 @@
 
 require 'sensu-plugin/check/cli'
 require 'dnsruby'
+require 'ipaddr'
 #
 # DNS
 #
@@ -132,6 +133,16 @@ class DNS < Sensu::Plugin::Check::CLI
     critical "Resolved #{config[:domain]} #{config[:type]} did not match #{regex}"
   end
 
+  def check_ips(entries)
+    ips = entries.answer.rrsets(config[:type]).flat_map(&:rrs).map(&:address).map(&:to_s)
+    result = IPAddr.new config[:result]
+    if ips.any? { |ip| (IPAddr.new ip) == result }
+      ok "Resolved #{entries.security_level} #{config[:domain]} #{config[:type]} included #{config[:result]}"
+    else
+      critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
+    end
+  end
+
   def run
     unknown 'No domain specified' if config[:domain].nil?
 
@@ -151,16 +162,25 @@ class DNS < Sensu::Plugin::Check::CLI
       output = "Could not resolve #{config[:domain]} #{config[:type]} record"
       config[:warn_only] ? warning(output) : critical(output)
     elsif config[:result]
-      b = if entries.answer.count > 1
-            entries.answer.rrsets(config[:type].to_s).to_s
-          else
-            entries.answer.first.to_s
-          end
-      if b.include?(config[:result])
-        ok "Resolved #{entries.security_level} #{config[:domain]} #{config[:type]} included #{config[:result]}"
+      # special logic for checking ipaddresses with result
+      # mostly for ipv6 but decided to use the same logic for
+      # consistency reasons
+      if config[:type] == 'A' || config[:type] == 'AAAA'
+        check_ips(entries)
+      # non ip type
       else
-        critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
+        b = if entries.answer.count > 1
+              entries.answer.rrsets(config[:type].to_s).to_s
+            else
+              entries.answer.first.to_s
+            end
+        if b.include?(config[:result])
+          ok "Resolved #{entries.security_level} #{config[:domain]} #{config[:type]} included #{config[:result]}"
+        else
+          critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
+        end
       end
+
     elsif config[:regex]
       check_against_regex(entries, Regexp.new(config[:regex]))
 
