@@ -96,6 +96,13 @@ class DNS < Sensu::Plugin::Check::CLI
          long: '--use-tcp',
          boolean: true
 
+  option :timeout,
+         description: 'Set timeout for query',
+         short: '-T TIMEOUT',
+         long: '--timeout TIMEOUT',
+         proc: proc(&:to_i),
+         default: 5
+
   def resolve_domain
     dnsruby_config = {}
     dnsruby_config[:nameserver] = [config[:server]] unless config[:server].nil?
@@ -104,6 +111,7 @@ class DNS < Sensu::Plugin::Check::CLI
     resolv = Dnsruby::Resolver.new(dnsruby_config)
     resolv.do_validation = true if config[:validate]
     entries = resolv.query(config[:domain], config[:type], config[:class])
+    resolv.query_timeout = config[:timeout]
     puts "Entries: #{entries}" if config[:debug]
 
     entries
