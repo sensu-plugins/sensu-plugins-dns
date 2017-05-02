@@ -39,6 +39,12 @@ class DNSGraphite < Sensu::Plugin::Metric::CLI::Graphite
          long: '--type RECORD',
          default: 'A'
 
+  option :class,
+         description: 'Record class to resolve (IN, CH, HS, ANY)',
+         short: '-c CLASS',
+         long: '--class CLASS',
+         default: 'IN'
+
   option :server,
          description: 'Server to use for resolution',
          short: '-s SERVER',
@@ -64,7 +70,7 @@ class DNSGraphite < Sensu::Plugin::Metric::CLI::Graphite
       dnsruby_config[:nameserver] = [config[:server]] unless config[:server].nil?
       dnsruby_config[:port] = config[:port] unless config[:port].nil?
       resolver = Dnsruby::Resolver.new(dnsruby_config)
-      result = Benchmark.realtime { resolver.query(config[:domain], config[:type]) }
+      result = Benchmark.realtime { resolver.query(config[:domain], config[:type], config[:class]) }
 
       key_name = config[:domain].to_s.tr('.', '_')
 
