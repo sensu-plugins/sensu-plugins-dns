@@ -4,11 +4,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+## [1.1.0]
 ### Added
-- Added option for DNS server port
-- Added option for use TCP instead of UDP
-- Added `--class` argument to both metric and check scripts
-- Added DNS lookup timeout option
+- Added option for DNS server port (@apriljo)
+- Added option for use TCP instead of UDP (@liqw33d)
+- Added `--class` argument to both metric and check scripts (@nickjacques)
+- Added DNS lookup timeout option (@winks)
 - check-dns.rb will now ignore case and expand shorthand when comparing ipv4 and pev6 records by turning them into ipaddr objects for comparison (@majormoses)
 
 ## [1.0.0] - 2016-05-11
@@ -48,7 +49,8 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ### Changed
 - removed cruft from /lib
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.0.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.1.0...HEAD
+[1.1.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.0.0...1/1.0
 [1.0.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/0.0.6...1.0.0
 [0.0.6]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/0.0.5...0.0.6
 [0.0.5]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/0.0.4...0.0.5
