@@ -97,6 +97,20 @@ class DNS < Sensu::Plugin::Check::CLI
          long: '--use-tcp',
          boolean: true
 
+  option :request_count,
+         description: 'Number of DNS requests to send',
+         short: '-c COUNT',
+         long: '--request_count COUNT',
+         proc: proc(&:to_i),
+         default: 1
+
+  option :threshold,
+         description: 'Percentage of DNS queries that must succeed',
+         short: '-l PERCENT',
+         long: '--threshold PERCENT',
+         proc: proc(&:to_i),
+         default: 100
+
   option :timeout,
          description: 'Set timeout for query',
          short: '-T TIMEOUT',
@@ -111,9 +125,20 @@ class DNS < Sensu::Plugin::Check::CLI
     dnsruby_config[:use_tcp] = config[:use_tcp] unless config[:use_tcp].nil?
     resolv = Dnsruby::Resolver.new(dnsruby_config)
     resolv.do_validation = true if config[:validate]
-    entries = resolv.query(config[:domain], config[:type], config[:class])
-    resolv.query_timeout = config[:timeout]
-    puts "Entries: #{entries}" if config[:debug]
+
+    entries = []
+    count = 0
+    while count < config[:request_count]
+      begin
+        entry = resolv.query(config[:domain], config[:type], config[:class])
+        resolv.query_timeout = config[:timeout]
+      rescue => e
+        entry = e
+      end
+      entries << entry
+      puts "Entry #{count}: #{entry}" if config[:debug]
+      count += 1
+    end
 
     entries
   end
@@ -133,6 +158,59 @@ class DNS < Sensu::Plugin::Check::CLI
     critical "Resolved #{config[:domain]} #{config[:type]} did not match #{regex}"
   end
 
+  def check_results(entries)
+    errors = []
+    success = []
+
+    entries.each do |entry|
+      if entry.class == Dnsruby::NXDomain
+        errors << "Could not resolve #{config[:domain]} #{config[:type]} record"
+        next
+      elsif entry.class == Dnsruby::ResolvTimeout
+        errors << "Could not resolve #{config[:domain]}: Query timed out"
+        next
+      elsif entry.is_a?(Exception)
+        errors << "Could not resolve #{config[:domain]}: #{entry}"
+        next
+      end
+
+      puts entry.answer if config[:debug]
+      if entry.answer.length.zero?
+        success << "Could not resolve #{config[:domain]} #{config[:type]} record"
+      elsif config[:result]
+        # special logic for checking ipaddresses with result
+        # mostly for ipv6 but decided to use the same logic for
+        # consistency reasons
+        if config[:type] == 'A' || config[:type] == 'AAAA'
+          check_ips(entries)
+        # non ip type
+        else
+          b = if entry.answer.count > 1
+                entry.answer.rrsets(config[:type].to_s).to_s
+              else
+                entry.answer.first.to_s
+              end
+          if b.include?(config[:result])
+            success << "Resolved #{entry.security_level} #{config[:domain]} #{config[:type]} included #{config[:result]}"
+          else
+            errors << "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
+          end
+        end
+      elsif config[:regex]
+        check_against_regex(entry, Regexp.new(config[:regex]))
+
+      elsif config[:validate]
+        if entry.security_level != 'SECURE'
+          error << "Resolved  #{entry.security_level} #{config[:domain]} #{config[:type]}"
+        end
+        success << "Resolved #{entry.security_level} #{config[:domain]} #{config[:type]}"
+      else
+        success << "Resolved #{config[:domain]} #{config[:type]}"
+      end
+    end
+    [errors, success]
+  end
+
   def check_ips(entries)
     ips = entries.answer.rrsets(config[:type]).flat_map(&:rrs).map(&:address).map(&:to_s)
     result = IPAddr.new config[:result]
@@ -145,52 +223,17 @@ class DNS < Sensu::Plugin::Check::CLI
 
   def run
     unknown 'No domain specified' if config[:domain].nil?
+    unknown 'Count must be 1 or more' if config[:request_count] < 1
 
-    begin
-      entries = resolve_domain
-    rescue Dnsruby::NXDomain
-      output = "Could not resolve #{config[:domain]} #{config[:type]} record"
-      critical(output)
-      return
-    rescue => e
-      output = "Could not resolve  #{config[:domain]}: #{e}"
+    entries = resolve_domain
+    errors, success = check_results(entries)
+
+    percent = success.count.to_f / config[:request_count] * 100
+    if percent < config[:threshold]
+      output = "#{percent.to_i}% of tests succeeded: #{errors.uniq.join(', ')}"
       config[:warn_only] ? warning(output) : critical(output)
-      return
-    end
-    puts entries.answer if config[:debug]
-    if entries.answer.length.zero?
-      output = "Could not resolve #{config[:domain]} #{config[:type]} record"
-      config[:warn_only] ? warning(output) : critical(output)
-    elsif config[:result]
-      # special logic for checking ipaddresses with result
-      # mostly for ipv6 but decided to use the same logic for
-      # consistency reasons
-      if config[:type] == 'A' || config[:type] == 'AAAA'
-        check_ips(entries)
-      # non ip type
-      else
-        b = if entries.answer.count > 1
-              entries.answer.rrsets(config[:type].to_s).to_s
-            else
-              entries.answer.first.to_s
-            end
-        if b.include?(config[:result])
-          ok "Resolved #{entries.security_level} #{config[:domain]} #{config[:type]} included #{config[:result]}"
-        else
-          critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
-        end
-      end
-
-    elsif config[:regex]
-      check_against_regex(entries, Regexp.new(config[:regex]))
-
-    elsif config[:validate]
-      if entries.security_level != 'SECURE'
-        critical "Resolved  #{entries.security_level} #{config[:domain]} #{config[:type]}"
-      end
-      ok "Resolved #{entries.security_level} #{config[:domain]} #{config[:type]}"
     else
-      ok "Resolved #{config[:domain]} #{config[:type]}"
+      ok(success.uniq.join(', '))
     end
   end
 end
