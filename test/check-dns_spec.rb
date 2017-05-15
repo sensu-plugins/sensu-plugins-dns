@@ -93,4 +93,47 @@ describe DNS do
     end
     expect(exit_code).to eq 2
   end
+
+  it 'returns ok when request_count > 1' do
+    begin
+      checker.config[:request_count] = 5
+
+      success = Dnsruby::Message.decode(fixture('google_success').read)
+      allow(Dnsruby::Resolver).to receive(:query).and_return(success)
+
+      checker.run
+    rescue SystemExit => e
+      exit_code = e.status
+    end
+    expect(exit_code).to eq 0
+  end
+
+  it 'returns critical with multiple results including a timeout' do
+    begin
+      checker.config[:request_count] = 5
+      success = Dnsruby::Message.decode(fixture('google_success').read)
+      timeout = Dnsruby::ResolvTimeout.new
+      allow(checker).to receive(:resolve_domain).and_return([success, success, timeout, success, success])
+
+      checker.run
+    rescue SystemExit => e
+      exit_code = e.status
+    end
+    expect(exit_code).to eq 2
+  end
+
+  it 'returns OK with multiple results including a single timeout and threshold 50%' do
+    begin
+      checker.config[:request_count] = 5
+      checker.config[:threshold] = 50
+      success = Dnsruby::Message.decode(fixture('google_success').read)
+      timeout = Dnsruby::ResolvTimeout.new
+      allow(checker).to receive(:resolve_domain).and_return([success, success, timeout, success, success])
+
+      checker.run
+    rescue SystemExit => e
+      exit_code = e.status
+    end
+    expect(exit_code).to eq 0
+  end
 end
