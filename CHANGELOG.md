@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+## [1.2.0] - 2017-05-16
 ### Added
 - Add support for making multiple requests, with a threshold for success
 
@@ -52,7 +53,8 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ### Changed
 - removed cruft from /lib
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.1.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.2.0...HEAD
+[1.2.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.1.0...1/1.2
 [1.1.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.0.0...1/1.0
 [1.0.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/0.0.6...1.0.0
 [0.0.6]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/0.0.5...0.0.6
