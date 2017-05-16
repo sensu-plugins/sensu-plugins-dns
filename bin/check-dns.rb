@@ -212,10 +212,10 @@ class DNS < Sensu::Plugin::Check::CLI
   end
 
   def check_ips(entries)
-    ips = entries.answer.rrsets(config[:type]).flat_map(&:rrs).map(&:address).map(&:to_s)
+    ips = entries.first.answer.rrsets(config[:type]).flat_map(&:rrs).map(&:address).map(&:to_s)
     result = IPAddr.new config[:result]
     if ips.any? { |ip| (IPAddr.new ip) == result }
-      ok "Resolved #{entries.security_level} #{config[:domain]} #{config[:type]} included #{config[:result]}"
+      ok "Resolved #{entries.first.security_level} #{config[:domain]} #{config[:type]} included #{config[:result]}"
     else
       critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
     end
