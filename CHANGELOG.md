@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+### Fixed
+- check-dns.rb: fixed a bug introduced in #15 as the input to check_ips changed. This bug only manifested itself when using the `-r || --result` options
 ## [1.2.0] - 2017-05-16
 ### Added
 - Add support for making multiple requests, with a threshold for success
