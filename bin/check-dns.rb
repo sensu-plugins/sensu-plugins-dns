@@ -182,7 +182,7 @@ class DNS < Sensu::Plugin::Check::CLI
         # mostly for ipv6 but decided to use the same logic for
         # consistency reasons
         if config[:type] == 'A' || config[:type] == 'AAAA'
-          check_ips(entries)
+          check_ips(entry)
         # non ip type
         else
           b = if entry.answer.count > 1
