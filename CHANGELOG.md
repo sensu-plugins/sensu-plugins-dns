@@ -6,6 +6,7 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ## [Unreleased]
 ### Added
 - Testing for Ruby 2.4.1
+- Remove redundant testing code
 
 ## [1.2.1] - 2017-05-16
 ### Fixed
