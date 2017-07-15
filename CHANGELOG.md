@@ -4,6 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+
+## [1.2.2] - 2017-07-15
+### Fixed
+- check-dns.rb: fixed a bug reported in #23 regarding an undefined variable only triggered when using the `--validate` flag. (@majormoses)
+
 ### Added
 - Testing for Ruby 2.4.1
 - Remove redundant testing code
