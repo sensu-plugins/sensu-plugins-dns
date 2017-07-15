@@ -201,7 +201,7 @@ class DNS < Sensu::Plugin::Check::CLI
 
       elsif config[:validate]
         if entry.security_level != 'SECURE'
-          error << "Resolved  #{entry.security_level} #{config[:domain]} #{config[:type]}"
+          errors << "Resolved  #{entry.security_level} #{config[:domain]} #{config[:type]}"
         end
         success << "Resolved #{entry.security_level} #{config[:domain]} #{config[:type]}"
       else
