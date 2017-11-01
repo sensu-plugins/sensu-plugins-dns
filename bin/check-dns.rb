@@ -65,7 +65,7 @@ class DNS < Sensu::Plugin::Check::CLI
          proc: proc(&:to_i)
 
   option :result,
-         description: 'A positive result entry',
+         description: 'A list of positive result entries (comma separated list)',
          short: '-r RESULT',
          long: '--result RESULT'
 
@@ -190,7 +190,7 @@ class DNS < Sensu::Plugin::Check::CLI
               else
                 entry.answer.first.to_s
               end
-          if b.include?(config[:result])
+          if config[:result].split(',').any? { |r| b.include?(r) }
             success << "Resolved #{entry.security_level} #{config[:domain]} #{config[:type]} included #{config[:result]}"
           else
             errors << "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
@@ -213,8 +213,11 @@ class DNS < Sensu::Plugin::Check::CLI
 
   def check_ips(entries)
     ips = entries.first.answer.rrsets(config[:type]).flat_map(&:rrs).map(&:address).map(&:to_s)
-    result = IPAddr.new config[:result]
-    if ips.any? { |ip| (IPAddr.new ip) == result }
+    results = config[:result].split(',').map { |r| IPAddr.new(r) }
+    found = results.any? do |result|
+      ips.any? { |ip| IPAddr.new(ip) == result }
+    end
+    if found
       ok "Resolved #{entries.first.security_level} #{config[:domain]} #{config[:type]} included #{config[:result]}"
     else
       critical "Resolved #{config[:domain]} #{config[:type]} did not include #{config[:result]}"
