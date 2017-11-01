@@ -5,6 +5,9 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 
 ## [Unreleased]
 
+### Added
+- Support for multiple resolvable ips (comma separated). (@adamdecaf)
+
 ## [1.2.2] - 2017-07-15
 ### Fixed
 - check-dns.rb: fixed a bug reported in #23 regarding an undefined variable only triggered when using the `--validate` flag. (@majormoses)
