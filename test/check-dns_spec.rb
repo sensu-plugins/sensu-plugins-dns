@@ -70,6 +70,19 @@ describe DNS do
     expect(exit_code).to eq 0
   end
 
+  it 'returns critical with no values to check against' do
+    begin
+      success = Dnsruby::Message.decode(fixture('google_success').read)
+      allow(Dnsruby::Resolver).to receive(:query).and_return(success)
+      checker.config[:result] = ""
+
+      checker.run
+    rescue SystemExit => e
+      exit_code = e.status
+    end
+    expect(exit_code).to eq 2
+  end
+
   it 'returns critical with a timeout' do
     begin
       timeout = Dnsruby::ResolvTimeout.new
@@ -100,6 +113,19 @@ describe DNS do
 
       success = Dnsruby::Message.decode(fixture('google_success').read)
       allow(Dnsruby::Resolver).to receive(:query).and_return(success)
+
+      checker.run
+    rescue SystemExit => e
+      exit_code = e.status
+    end
+    expect(exit_code).to eq 0
+  end
+
+  it 'returns ok with multiple valid resolutions' do
+    begin
+      success = Dnsruby::Message.decode(fixture('google_success').read)
+      allow(Dnsruby::Resolver).to receive(:query).and_return(success)
+      checker.config[:result] = '1.1.1.1,216.58.216.78'
 
       checker.run
     rescue SystemExit => e
