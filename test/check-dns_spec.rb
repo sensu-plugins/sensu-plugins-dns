@@ -74,7 +74,7 @@ describe DNS do
     begin
       success = Dnsruby::Message.decode(fixture('google_success').read)
       allow(Dnsruby::Resolver).to receive(:query).and_return(success)
-      checker.config[:result] = ""
+      checker.config[:result] = ''
 
       checker.run
     rescue SystemExit => e
@@ -125,7 +125,7 @@ describe DNS do
     begin
       success = Dnsruby::Message.decode(fixture('google_success').read)
       allow(Dnsruby::Resolver).to receive(:query).and_return(success)
-      checker.config[:result] = '1.1.1.1,216.58.216.78'
+      checker.config[:result] = '1.1.1.1,172.217.12.78'
 
       checker.run
     rescue SystemExit => e
