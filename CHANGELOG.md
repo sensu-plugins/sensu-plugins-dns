@@ -5,6 +5,7 @@ This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins
 
 ## [Unreleased]
 
+## [1.3.0] - 2017-11-04
 ### Added
 - Support for multiple resolvable ips (comma separated). (@adamdecaf)
 - integration testing with `test-kitchen`, `kitchen-docker`, etc (@majormoses)
@@ -76,6 +77,7 @@ This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins
 - removed cruft from /lib
 
 [Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.2.1...HEAD
+[1.3.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.2.1...1.3.0
 [1.2.1]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.2.0...1/1.2.1
 [1.2.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.1.0...1/1.2
 [1.1.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.0.0...1/1.0
