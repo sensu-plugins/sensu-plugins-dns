@@ -1,12 +1,19 @@
-#Change Log
+# Change Log
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
+This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins/community/blob/master/HOW_WE_CHANGELOG.md)
 
 ## [Unreleased]
 
 ### Added
 - Support for multiple resolvable ips (comma separated). (@adamdecaf)
+- integration testing with `test-kitchen`, `kitchen-docker`, etc (@majormoses)
+
+### Changed
+- update changelog guidelines location (@majormoses)
+
+### Removed
+- removed ruby 2.0 testing (@majormoses)
 
 ## [1.2.2] - 2017-07-15
 ### Fixed

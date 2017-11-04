@@ -162,7 +162,8 @@ class DNS < Sensu::Plugin::Check::CLI
     errors = []
     success = []
 
-    entries.each do |entry|
+    # TODO: come back and refactor
+    entries.each do |entry| # rubocop:disable Metrics/BlockLength
       if entry.class == Dnsruby::NXDomain
         errors << "Could not resolve #{config[:domain]} #{config[:type]} record"
         next

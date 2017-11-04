@@ -16,3 +16,6 @@ mkmf.log
 .DS_Store
 .idea/*
 *.gem
+.kitchen/
+.kitchen.list.yml.kitchen/
+.kitchen.list.yml
