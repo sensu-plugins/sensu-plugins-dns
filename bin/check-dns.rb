@@ -133,7 +133,7 @@ class DNS < Sensu::Plugin::Check::CLI
       begin
         entry = resolv.query(config[:domain], config[:type], config[:class])
         resolv.query_timeout = config[:timeout]
-      rescue => e
+      rescue StandardError => e
         entry = e
       end
       entries << entry
@@ -155,7 +155,7 @@ class DNS < Sensu::Plugin::Check::CLI
       if answer.match(regex)
         ok "Resolved #{config[:domain]} #{config[:type]} matched #{regex}"
       end
-    end # b.each()
+    end
     critical "Resolved #{config[:domain]} #{config[:type]} did not match #{regex}"
   end
 
