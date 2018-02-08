@@ -78,7 +78,7 @@ class DNSGraphite < Sensu::Plugin::Metric::CLI::Graphite
       output "#{config[:scheme]}.#{config[:type]}.#{key_name}.response_time", result.to_f.round(8)
     rescue Dnsruby::NXDomain
       critical "Could not resolve #{config[:domain]} #{config[:type]} record"
-    rescue => e
+    rescue StandardError => e
       unknown e
     end
 
