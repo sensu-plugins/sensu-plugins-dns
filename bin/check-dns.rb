@@ -54,7 +54,7 @@ class DNS < Sensu::Plugin::Check::CLI
          default: 'IN'
 
   option :server,
-         description: 'Server to use for resolution',
+         description: 'A comma-separated list of servers to use for resolution',
          short: '-s SERVER',
          long: '--server SERVER'
 
@@ -118,9 +118,10 @@ class DNS < Sensu::Plugin::Check::CLI
          proc: proc(&:to_i),
          default: 5
 
-  def resolve_domain
+  def resolve_domain(server)
     dnsruby_config = {}
-    dnsruby_config[:nameserver] = [config[:server]] unless config[:server].nil?
+
+    dnsruby_config[:nameserver] = server unless server.nil?
     dnsruby_config[:port] = config[:port] unless config[:port].nil?
     dnsruby_config[:use_tcp] = config[:use_tcp] unless config[:use_tcp].nil?
     resolv = Dnsruby::Resolver.new(dnsruby_config)
@@ -229,10 +230,19 @@ class DNS < Sensu::Plugin::Check::CLI
     unknown 'No domain specified' if config[:domain].nil?
     unknown 'Count must be 1 or more' if config[:request_count] < 1
 
-    entries = resolve_domain
-    errors, success = check_results(entries)
+    success = []
+    errors = []
 
-    percent = success.count.to_f / config[:request_count] * 100
+    ns = config[:server].nil? ? [nil] : config[:server].split(',')
+    ns.each do |server|
+      entries = resolve_domain(server)
+      e, s = check_results(entries)
+
+      success += s
+      errors += e
+    end
+
+    percent = success.count.to_f / (config[:request_count] * ns.count) * 100
     if percent < config[:threshold]
       output = "#{percent.to_i}% of tests succeeded: #{errors.uniq.join(', ')}"
       config[:warn_only] ? warning(output) : critical(output)
