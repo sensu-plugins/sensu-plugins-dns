@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins/community/blob/master/HOW_WE_CHANGELOG.md)
 
 ## [Unreleased]
+
+## [1.4.0] - 2018-03-21
+### Added
 - check-dns.rb: Added ability to use many name servers (@yuri-zubov)
 
 ## [1.3.0] - 2017-11-04
@@ -77,7 +80,8 @@ This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins
 ### Changed
 - removed cruft from /lib
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.2.1...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.4.0...HEAD
+[1.4.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.3.0...1.4.0
 [1.3.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.2.1...1.3.0
 [1.2.1]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.2.0...1/1.2.1
 [1.2.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.1.0...1/1.2
