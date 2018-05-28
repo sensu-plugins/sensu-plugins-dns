@@ -71,7 +71,8 @@ class DNSZone < Sensu::Plugin::Check::CLI
   def check_whois(entries)
     errors = []
     success = []
-    record = Whois.whois(config[:domain])
+    client = Whois::Client.new(timeout: config[:timeout])
+    record = client.lookup(config[:domain])
     parser = record.parser
     additional_text = "(whois #{parser.nameservers.map(&:name)}) (dig #{entries})"
     if Set.new(parser.nameservers.map(&:name)) == Set.new(entries)
