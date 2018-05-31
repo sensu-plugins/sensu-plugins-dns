@@ -5,6 +5,9 @@ This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins
 
 ## [Unreleased]
 
+### Changed
+- check-dns-zone.rb: `--timeout` is now also applied on the whois lookup (@eberkut)
+
 ## [2.0.0] - 03-29-2018
 ### Breaking Changes
 - Dropping ruby `< 2.2` support (@yuri-zubov)
