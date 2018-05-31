@@ -5,6 +5,7 @@ This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins
 
 ## [Unreleased]
 
+## [2.1.0] - 2018-05-30
 ### Changed
 - check-dns-zone.rb: `--timeout` is now also applied on the whois lookup (@eberkut)
 
@@ -94,7 +95,8 @@ This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins
 ### Changed
 - removed cruft from /lib
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/2.0.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/2.1.0...HEAD
+[2.1.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.4.0...2.0.0
 [1.4.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.3.0...1.4.0
 [1.3.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.2.1...1.3.0
