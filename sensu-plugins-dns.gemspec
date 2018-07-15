@@ -34,9 +34,10 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
 
   s.add_runtime_dependency 'sensu-plugin', '~> 1.2'
 
-  s.add_development_dependency 'bundler', '~> 1.7'
   s.add_runtime_dependency     'dnsruby', '~> 1.59', '>= 1.59.2'
-  s.add_runtime_dependency     'public_suffix',             '~> 2'
+  s.add_runtime_dependency     'public_suffix',      '~> 2'
+
+  s.add_development_dependency 'bundler', '~> 1.7'
   s.add_development_dependency 'codeclimate-test-reporter', '~> 0.4'
   s.add_development_dependency 'github-markup',             '~> 1.3'
   s.add_development_dependency 'kitchen-docker',            '~> 2.6'

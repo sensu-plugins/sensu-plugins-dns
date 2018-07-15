@@ -5,6 +5,11 @@ This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins
 
 ## [Unreleased]
 
+
+## [1.4.1] - 2018-07-15
+### Fixed
+- explicitly depend on `public_suffix` version `~> 2` to keep support for ruby `2.0` (@mandre)
+
 ## [1.4.0] - 2018-03-21
 ### Added
 - check-dns.rb: Added ability to use many name servers (@yuri-zubov)
