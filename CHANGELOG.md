@@ -5,6 +5,7 @@ This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins
 
 ## [Unreleased]
 
+## [2.1.1] - 2018-07-16
 ### Fixed
 - explicitly depend on `public_suffix` version `~> 2` to keep support for ruby `2.0` (@mandre)
 
@@ -12,7 +13,7 @@ This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins
 ### Changed
 - check-dns-zone.rb: `--timeout` is now also applied on the whois lookup (@eberkut)
 
-## [2.0.0] - 03-29-2018
+## [2.0.0] - 2018-03-29
 ### Breaking Changes
 - Dropping ruby `< 2.2` support (@yuri-zubov)
 
@@ -98,7 +99,8 @@ This CHANGELOG follows the format listed [here](https://github.com/sensu-plugins
 ### Changed
 - removed cruft from /lib
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/2.1.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/2.1.1...HEAD
+[2.1.1]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.4.0...2.0.0
 [1.4.0]: https://github.com/sensu-plugins/sensu-plugins-dns/compare/1.3.0...1.4.0
