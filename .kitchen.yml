@@ -17,9 +17,6 @@ platforms:
   - name: debian-9
 
 suites:
-  - name: ruby-22
-    driver:
-      image: ruby:2.2-slim
   - name: ruby-230
     driver:
       image: ruby:2.3.0-slim
