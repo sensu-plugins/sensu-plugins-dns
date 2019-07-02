@@ -14,7 +14,7 @@ verifier:
   ruby_bindir: /usr/local/bin
 
 platforms:
-  - name: debian-9
+  - name: debian-8
 
 suites:
   - name: ruby-230
