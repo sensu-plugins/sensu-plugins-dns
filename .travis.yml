@@ -9,7 +9,6 @@ before_install:
 install:
 - bundle install
 rvm:
-- 2.2
 - 2.3.0
 - 2.4.1
 notifications:
@@ -23,15 +22,23 @@ script:
 - bundle exec rake kitchen:ruby-`echo $TRAVIS_RUBY_VERSION | sed -e "s/\.//g"`-debian-8
 - gem build sensu-plugins-dns.gemspec
 - gem install sensu-plugins-dns-*.gem
+before_deploy:
+- bash -c "[ ! -d bonsai/ ] && git clone https://github.com/sensu/sensu-go-bonsai-asset.git bonsai || echo 'bonsai/ exists, skipping git clone'"
 deploy:
-  provider: rubygems
+- provider: rubygems
   api_key:
     secure: bBKyFFIEuFpUeBclj1mo/tEfhO+q1v7IV3O42NkiOMZf9PMVj+dCEO5u4ptiPoQi/1Knu34kzrexatPNRx6PDd4Bglod/ZO2ILDAhRXwVvcrl1O4OcS0JtAH+Gx4CyGbMLFLEDI1f6WYheV860zrvdxm4Dt+XmMYZW3gnZ2+F50=
   gem: sensu-plugins-dns
   on:
     tags: true
     all_branches: true
-    rvm: 2.2
     rvm: 2.3.0
     rvm: 2.4.1
     repo: sensu-plugins/sensu-plugins-dns
+- provider: script
+  script: bonsai/ruby-runtime/travis-build-ruby-plugin-assets.sh sensu-plugins-uptime-checks
+  skip_cleanup: true
+  on:
+    tags: true
+    all_branches: true
+    rvm: 2.4.1
