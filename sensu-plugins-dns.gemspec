@@ -40,7 +40,10 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.add_development_dependency 'codeclimate-test-reporter', '~> 1.0'
   s.add_development_dependency 'github-markup',             '~> 3.0'
   s.add_runtime_dependency     'whois',                     '~> 4.0'
-  s.add_runtime_dependency     'whois-parser',              '~> 1.0'
+  # locked to keep ruby < 2.5 support
+  s.add_runtime_dependency     'whois-parser',              ['> 1.0', '< 5.0']
+  # locked to keep ruby < 2.5 support, this is pulled in by whois-parser
+  s.add_runtime_dependency     'activesupport',             '< 6.0'
   s.add_development_dependency 'kitchen-docker',            '~> 2.6'
   s.add_development_dependency 'kitchen-localhost',         '~> 0.3'
   # locked to keep ruby 2.1 support, this is pulled in by test-kitchen
