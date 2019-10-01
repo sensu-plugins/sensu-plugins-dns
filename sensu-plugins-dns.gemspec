@@ -26,13 +26,13 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.platform               = Gem::Platform::RUBY
   s.post_install_message   = 'You can use the embedded Ruby by setting EMBEDDED_RUBY=true in /etc/default/sensu'
   s.require_paths          = ['lib']
-  s.required_ruby_version  = '>= 2.2.0'
+  s.required_ruby_version  = '>= 2.3.0'
   # s.signing_key            = File.expand_path(pvt_key) if $PROGRAM_NAME =~ /gem\z/
   s.summary                = 'Sensu plugins for dns'
   s.test_files             = s.files.grep(%r{^(test|spec|features)/})
   s.version                = SensuPluginsDNS::Version::VER_STRING
 
-  s.add_runtime_dependency 'sensu-plugin', '~> 1.2'
+  s.add_runtime_dependency 'sensu-plugin', '~> 4.0'
 
   s.add_development_dependency 'bundler', '~> 1.7'
   s.add_runtime_dependency     'dnsruby', '~> 1.59', '>= 1.59.2'
@@ -40,7 +40,10 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.add_development_dependency 'codeclimate-test-reporter', '~> 1.0'
   s.add_development_dependency 'github-markup',             '~> 3.0'
   s.add_runtime_dependency     'whois',                     '~> 4.0'
-  s.add_runtime_dependency     'whois-parser',              '~> 1.0'
+  # locked to keep ruby < 2.5 support
+  s.add_runtime_dependency     'whois-parser',              ['> 1.0', '< 5.0']
+  # locked to keep ruby < 2.5 support, this is pulled in by whois-parser
+  s.add_runtime_dependency     'activesupport',             '< 6.0'
   s.add_development_dependency 'kitchen-docker',            '~> 2.6'
   s.add_development_dependency 'kitchen-localhost',         '~> 0.3'
   # locked to keep ruby 2.1 support, this is pulled in by test-kitchen
