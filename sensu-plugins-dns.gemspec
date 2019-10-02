@@ -39,7 +39,7 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.add_runtime_dependency     'public_suffix',             '~> 2'
   s.add_development_dependency 'codeclimate-test-reporter', '~> 1.0'
   s.add_development_dependency 'github-markup',             '~> 3.0'
-  s.add_runtime_dependency     'whois',                     '~> 4.0'
+  s.add_runtime_dependency     'whois',                     '>= 4', '< 6'
   # locked to keep ruby < 2.5 support
   s.add_runtime_dependency     'whois-parser',              ['> 1.0', '< 5.0']
   # locked to keep ruby < 2.5 support, this is pulled in by whois-parser
